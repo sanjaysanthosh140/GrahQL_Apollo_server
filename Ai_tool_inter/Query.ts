@@ -69,8 +69,9 @@ export const resolvers = {
   Query: {
     ai_web_tools: async (_: any, __: any, context: any) => {
       try {
+        console.log("ai tools called");
         if (!context.user) throw new Error("please login first");
-        console.log(context);
+        console.log("contex",context);
         const web_tools = await pool.query("SELECT * FROM aitool");
         return web_tools.rows;
       } catch (error) {
@@ -91,10 +92,12 @@ export const resolvers = {
       }
     },
 
-    ai_app_tools: async () => {
+    ai_app_tools: async (_: any, __: any) => {
       try {
-        const app_tools = await pool.query("SELECT * FROM ai_app_tools");
-        return app_tools.rows;
+      console.log("ai app tools callsed");
+          const app_tools = await pool.query("SELECT * FROM ai_app_tools");
+          return app_tools.rows;
+      
       } catch (error) {
         console.log(error);
       }

@@ -24,14 +24,14 @@ const ApolloServer_start = async () => {
                     const cookies = req.cookies;
                     console.log("gql cookies",cookies);
                     const token = req.headers.authorization || '';
-                    console.log(req.session);
+                    console.log("token",token);
 
                     if (cookies) {
                         const cookieHeader = Object.entries(cookies)
                         .map(([key, value])=> 
                             `${key}=${value}`
                         ).join(';');
-                        console.log(cookieHeader);
+                       // console.log(cookieHeader);
                         const user_data = await fetch('http://localhost:4000/user_side/checkauth', {
                             method: 'GET',
                             headers: {
@@ -41,8 +41,9 @@ const ApolloServer_start = async () => {
                             },
                             credentials: "include"
                         })
+                        //console.log("user_data",user_data)
                         return {
-                            user: await user_data.json()
+                           user: await user_data.json()
                         }
 
                     }

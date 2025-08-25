@@ -79,9 +79,10 @@ exports.resolvers = {
     Query: {
         ai_web_tools: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {
             try {
+                console.log("ai tools called");
                 if (!context.user)
                     throw new Error("please login first");
-                console.log(context);
+                console.log("contex", context);
                 const web_tools = yield pool.query("SELECT * FROM aitool");
                 return web_tools.rows;
             }
@@ -99,8 +100,9 @@ exports.resolvers = {
                 console.log(error);
             }
         }),
-        ai_app_tools: () => __awaiter(void 0, void 0, void 0, function* () {
+        ai_app_tools: (_, __) => __awaiter(void 0, void 0, void 0, function* () {
             try {
+                console.log("ai app tools callsed");
                 const app_tools = yield pool.query("SELECT * FROM ai_app_tools");
                 return app_tools.rows;
             }

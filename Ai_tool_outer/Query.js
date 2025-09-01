@@ -46,7 +46,7 @@ type Ai_api_tools{
   category:String!
 }
 
-type Ai_Sqlquery_tools{
+type Ai_sql_tools{
   id:ID!
   name:String!
   description:String!
@@ -69,8 +69,8 @@ type Query {
   ai_api_tool(id:ID!):Ai_api_tools
   
   #sql
-  ai_Sqlquery_tools: [Ai_Sqlquery_tools]
-  ai_Sqlquery_tool(id:ID!):Ai_Sqlquery_tools
+  ai_sql_tools: [Ai_sql_tools]
+  ai_sql_tool(id:ID!):Ai_sql_tools
 
 }
 
@@ -100,7 +100,7 @@ exports.resolvers = {
                 console.log(error);
             }
         }),
-        ai_app_tools: (_, __) => __awaiter(void 0, void 0, void 0, function* () {
+        ai_app_tools: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 console.log("ai app tools callsed");
                 const app_tools = yield pool.query("SELECT * FROM ai_app_tools");
@@ -120,7 +120,7 @@ exports.resolvers = {
                 console.log(error);
             }
         }),
-        ai_api_tools: () => __awaiter(void 0, void 0, void 0, function* () {
+        ai_api_tools: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 const api_tools = yield pool.query("SELECT * FROM api_app_tools");
                 return api_tools.rows;
@@ -138,8 +138,9 @@ exports.resolvers = {
                 console.log(error);
             }
         }),
-        ai_Sqlquery_tools: () => __awaiter(void 0, void 0, void 0, function* () {
+        ai_sql_tools: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {
             try {
+                console.log("ai sql query is called");
                 const sql_tools = yield pool.query("SELECT * FROM sql_query_tools");
                 return sql_tools.rows;
             }
@@ -147,7 +148,7 @@ exports.resolvers = {
                 console.log(error);
             }
         }),
-        ai_Sqlquery_tool: (_, arg) => __awaiter(void 0, void 0, void 0, function* () {
+        ai_sql_tool: (_, arg) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 const sql_tool = yield pool.query("SELECT * FROM sql_query_tools WHERE id = $1", [arg.id]);
                 return sql_tool.rows[0];
@@ -155,6 +156,6 @@ exports.resolvers = {
             catch (error) {
                 console.log(error);
             }
-        }),
-    },
+        })
+    }
 };

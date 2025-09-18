@@ -1,10 +1,15 @@
+import { json } from "body-parser";
 import { Pool } from "pg";
+import fetch from "node-fetch";
+import { retrive_Pin_tools } from "./pin_tools_merg";
 const pool = require("./db/postgresQL");
+const errs = require("./custom_Error/err");
 // const pool = new Pool({
 // connectionString:
 // "postgresql://neondb_owner:npg_dFOvUJ0m7oVr@ep-dawn-sun-a1yipn4i-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require",
 // ssl: true,
 // });
+let message = false;
 export const typeDefs = `#graphql 
 
 type Ai_web_tools {
@@ -54,20 +59,20 @@ type AI_marketing_shopify_tools{
 }
 type AI_marketing_web_design_tools{
   id:ID!
-  name:Sting!
-  decription:String!
+  name:String!
+  description:String!
   officialurl:String!
   pricing:String!
-  category:Sting!
+  category:String!
 }
 
 type AI_marketing_seo_tools{
   id:ID!
-  name:Sting!
-  description:Sting!
-  officialurl:Sting!
+  name:String!
+  description:String!
+  officialurl:String!
   pricing:String!
-  category:string!
+  category:String!
 }
 
 type AI_marketing_googleADD_tools{
@@ -90,7 +95,7 @@ type AI_edu_video_summarizer_tools{
 }
 type AI_edu_image_analist_tools{
   id:ID!
-  name:string!
+  name:String!
   description:String!
   officialurl:String!
   pricing:String!
@@ -129,7 +134,7 @@ type AI_content_detect_tools{
   description:String!
   officialurl:String!
   pricing:String!
-  category:string!
+  category:String!
 }
 type AI_free_detect_tools{
   id:ID!
@@ -144,8 +149,8 @@ type AI_huminator_tools{
  name:String!
  description:String!
  officialurl:String!
- pricing:String!
  category:String!
+ pricing:String!
 }
 # video_generation tools
 type AI_video_generator_tools{
@@ -181,6 +186,16 @@ type AI_video_generator_tools{
   pricing:String!
   category:String!
  }
+ type Ai_frv_tools{
+    id:ID!
+   name:String!
+   description:String!
+   officialurl:String!
+   pricing:String!
+   category:String!
+}
+ 
+ 
 type Query {
   #web
   ai_web_tools: [Ai_web_tools]
@@ -198,6 +213,7 @@ type Query {
   ai_sql_tools: [Ai_sql_tools]
   ai_sql_tool(id:ID!):Ai_sql_tools
   
+
   #Drop_ship
   ai_shopify_tools:[AI_marketing_shopify_tools]
   ai_shopify_tool(id:ID!):AI_marketing_shopify_tools #,
@@ -207,6 +223,9 @@ type Query {
 
   ai_seo_tools:[AI_marketing_seo_tools]
   ai_seo_tool(id:ID!):AI_marketing_seo_tools#,
+  
+  ai_google_add_tools:[AI_marketing_googleADD_tools]
+  ai_google_add_tool(id:ID!):AI_marketing_googleADD_tools#
 
   # Education 
   ai_video_summerizer_tools:[AI_edu_video_summarizer_tools]
@@ -247,23 +266,22 @@ type Query {
   ai_ugc_tools:[AI_ugc_video_tools]
   ai_ugc_tool(id:ID!):AI_ugc_video_tools#,
   
-   
 
-
-
-
-
-
-}
+  # frv_cart
+   frv_toolslist:[Ai_frv_tools]
+    
+  }
 
 `;
 
 export const resolvers = {
   Query: {
+    // software_developing_ai_tools
     ai_web_tools: async (_: any, __: any, context: any) => {
       try {
         console.log("ai tools called");
-        if (!context.user) throw new Error("please login first");
+        // if (!context.user) {
+        // }
         console.log("contex", context);
         const web_tools = await pool.query("SELECT * FROM aitool");
         return web_tools.rows;
@@ -331,11 +349,17 @@ export const resolvers = {
 
     ai_sql_tools: async (_: any, __: any, context: any) => {
       try {
+        if (!context.user.isAuthenticate) {
+          throw new Error("login first");
+        }
+        console.log("context", context.user.user_id);
         console.log("ai sql query is called");
         const sql_tools = await pool.query("SELECT * FROM sql_query_tools");
+        console.log("here worked from api");
         return sql_tools.rows;
       } catch (error) {
         console.log(error);
+        throw error;
       }
     },
 
@@ -349,6 +373,221 @@ export const resolvers = {
       } catch (error) {
         console.log(error);
       }
-    }
-  }
+    },
+
+    frv_toolslist: async (_: any, __: any, context: any) => {
+      /////// frv_tools
+      try {
+        //let pin_tool
+        console.log("function is called for frv_tools");
+        console.log(context.user.user_id);
+        let id = context.user.user_id;
+        //console.log(id._id)
+        const response = await fetch(
+          `http://localhost:4000/user_side/retrive_wish/${id}`
+        );
+
+        const data = await response.json();
+
+        const user_frv_tools:any= await retrive_Pin_tools(data);
+        console.log("##", user_frv_tools);
+        // ADD THIS DEBUG CODE TO FIND THE NULL VALUE
+        user_frv_tools.forEach((tool: { name: null | undefined; }, index: any) => {
+          if (!tool || tool.name === null || tool.name === undefined) {
+            console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
+          }
+        });
+
+        // Filter out any null values before returning
+        const filteredTools = user_frv_tools.filter(
+          (tool: { name: null | undefined; }) => tool && tool.name !== null && tool.name !== undefined
+        );
+
+        console.log("Filtered tools count:", filteredTools.length);
+        return  filteredTools
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    ////////////////////
+    // Drop_ship
+    ai_shopify_tools: async (_: any, __: any, context: any) => {
+      try {
+        console.log("marketing function called");
+        const shopify_tools = await pool.query(
+          "SELECT * FROM ai_marketing_tool"
+        );
+        return shopify_tools.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // gap fetching $id
+    ai_web_design_tool: async (_: any, __: any, context: any) => {
+      console.log("working id");
+    },
+
+    ai_web_design_tools: async (_: any, __: any, context: any) => {
+      try {
+        console.log("working on web_design");
+        const web_design = await pool.query(
+          "SELECT * FROM ai_marketing_web_design"
+        );
+        return web_design.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_seo_tools: async (_: any, __: any, context: any) => {
+      try {
+        console.log("working on seo");
+        const seo_tools = await pool.query(
+          "SELECT * FROM ai_marketing_seo_tools"
+        );
+        return seo_tools.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_google_add_tools: async (_: any, __: any, context: any) => {
+      try {
+        console.log("working on google add");
+        const googleadd = await pool.query("SELECT * FROM ai_googleadd");
+        return googleadd.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    // ai_detectors
+    ai_free_detector_tools: async (_: any, __: any, context: any) => {
+      try {
+        const ai_free_tool = await pool.query(
+          "SELECT * FROM ai_free_detector_tool"
+        );
+        return ai_free_tool.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_bypasser_tools: async (_: any, __: any, context: any) => {
+      try {
+        const ai_bypasser = await pool.query(
+          "SELECT * FROM ai_detector_bypass_tool"
+        );
+        return ai_bypasser.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_content_detector_tools: async (_: any, __: any, context: any) => {
+      try {
+        const ai_contetn_detet = await pool.query(
+          "SELECT * FROM ai_content_detector_tool"
+        );
+        return ai_contetn_detet.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_humanizor_tools: async (_: any, __: any, context: any) => {
+      try {
+        const ai_humanizor = await pool.query(
+          "SELECT * FROM ai_humanizor_tool"
+        );
+        return ai_humanizor.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_know_manage_tools: async (_: any, __: any, context: any) => {
+      try {
+        const know_mange = await pool.query(
+          "SELECT * FROM ai_edu_know_mange_tool"
+        );
+        return know_mange.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_image_analist_tools: async (_: any, __: any, contect: any) => {
+      try {
+        const img_analist = await pool.query("SELECT * FROM ai_edu_img_tool");
+        return img_analist.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_mind_map_tools: async (_: any, __: any, context: any) => {
+      try {
+        const mind_map = await pool.query("SELECT * FROM ai_edu_mind_maping");
+        return mind_map.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_video_summerizer_tools: async (_: any, __: any, context: any) => {
+      try {
+        const video_summerizer = await pool.query(
+          "SELECT * FROM ai_edu_video_tool"
+        );
+        return video_summerizer.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    ////////
+    ai_video_creator_tools: async (_: any, __: any, context: any) => {
+      try {
+        const video_creator = await pool.query(
+          "SELECT * FROM ai_video_generator_tool"
+        );
+        return video_creator.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_video_summerizor_tools: async (_: any, __: any, context: any) => {
+      try {
+        const ai_video_tools = await pool.query(
+          "SELECT * FROM ai_video_summarizer_tool"
+        );
+        return ai_video_tools.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_long_video_short_tools: async (_: any, __: any, context: any) => {
+      try {
+        const long_to_short = await pool.query(
+          "SELECT * FROM ai_long_videotoshort_tool"
+        );
+        return long_to_short.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    ai_ugc_tools: async (_: any, __: any, context: any) => {
+      try {
+        const ugc_video_tool = await pool.query(
+          "SELECT * FROM ai_ugc_video_tool"
+        );
+        return ugc_video_tool.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };

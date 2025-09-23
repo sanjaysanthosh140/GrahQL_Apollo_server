@@ -389,22 +389,25 @@ export const resolvers = {
 
         const data = await response.json();
 
-        const user_frv_tools:any= await retrive_Pin_tools(data);
+        const user_frv_tools: any = await retrive_Pin_tools(data);
         console.log("##", user_frv_tools);
         // ADD THIS DEBUG CODE TO FIND THE NULL VALUE
-        user_frv_tools.forEach((tool: { name: null | undefined; }, index: any) => {
-          if (!tool || tool.name === null || tool.name === undefined) {
-            console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
+        user_frv_tools.forEach(
+          (tool: { name: null | undefined }, index: any) => {
+            if (!tool || tool.name === null || tool.name === undefined) {
+              console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
+            }
           }
-        });
+        );
 
         // Filter out any null values before returning
         const filteredTools = user_frv_tools.filter(
-          (tool: { name: null | undefined; }) => tool && tool.name !== null && tool.name !== undefined
+          (tool: { name: null | undefined }) =>
+            tool && tool.name !== null && tool.name !== undefined
         );
 
         console.log("Filtered tools count:", filteredTools.length);
-        return  filteredTools
+        return filteredTools;
       } catch (error) {
         console.log(error);
       }

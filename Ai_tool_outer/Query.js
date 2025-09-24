@@ -485,6 +485,7 @@ exports.resolvers = {
                 console.log(error);
             }
         }),
+        // education
         ai_know_manage_tools: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 const know_mange = yield pool.query("SELECT * FROM ai_edu_know_mange_tool");
@@ -521,7 +522,7 @@ exports.resolvers = {
                 console.log(error);
             }
         }),
-        ////////
+        ////////videos
         ai_video_creator_tools: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 const video_creator = yield pool.query("SELECT * FROM ai_video_generator_tool");

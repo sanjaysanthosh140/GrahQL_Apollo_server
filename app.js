@@ -80,7 +80,7 @@ const ApolloServer_start = async () => {
                 allowedHeaders: ['Content-Type', 'Authorization']
             }
         });
-        app.listen(PORT, () => {
+        app.listen(PORT,'0.0.0.0' ,() => {
             console.log(`Server is running on port: http://localhost:8383${server.graphqlPath}`)
         })
     } catch (error) {

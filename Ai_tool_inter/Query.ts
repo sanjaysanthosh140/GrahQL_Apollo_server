@@ -508,7 +508,7 @@ export const resolvers = {
         console.log(error);
       }
     },
-
+// education
     ai_know_manage_tools: async (_: any, __: any, context: any) => {
       try {
         const know_mange = await pool.query(
@@ -548,7 +548,7 @@ export const resolvers = {
         console.log(error);
       }
     },
-    ////////
+    ////////videos
     ai_video_creator_tools: async (_: any, __: any, context: any) => {
       try {
         const video_creator = await pool.query(

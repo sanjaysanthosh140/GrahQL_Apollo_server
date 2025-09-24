@@ -384,7 +384,7 @@ export const resolvers = {
         let id = context.user.user_id;
         //console.log(id._id)
         const response = await fetch(
-          `http://localhost:4000/user_side/retrive_wish/${id}`
+          `https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`
         );
 
         const data = await response.json();

@@ -33,7 +33,7 @@ const ApolloServer_start = async () => {
                                 `${key}=${value}`
                             ).join(';');
                         // console.log(cookieHeader);
-                       const user_data = await fetch('http://localhost:4000/user_side/checkauth', {
+                       const user_data = await fetch('https://myapp-server-side-rfxp.onrender.com/user_side/checkauth', {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',

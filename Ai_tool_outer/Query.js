@@ -383,7 +383,7 @@ exports.resolvers = {
                 console.log(context.user.user_id);
                 let id = context.user.user_id;
                 //console.log(id._id)
-                const response = yield (0, node_fetch_1.default)(`http://localhost:4000/user_side/retrive_wish/${id}`);
+                const response = yield (0, node_fetch_1.default)(`https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`);
                 const data = yield response.json();
                 const user_frv_tools = yield (0, pin_tools_merg_1.retrive_Pin_tools)(data);
                 console.log("##", user_frv_tools);

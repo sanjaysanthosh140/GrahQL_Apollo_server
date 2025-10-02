@@ -319,7 +319,7 @@ export const resolvers = {
           "SELECT * FROM ai_app_tools WHERE id = $1",
           [arg.id]
         );
-        console.log(app_tool);
+       // console.log(app_tool);
         return app_tool.rows[0];
       } catch (error) {
         console.log(error);

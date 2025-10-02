@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-//app.use(bodyParser.json());
+
 app.use(morgan('dev'));
 
 const ApolloServer_start = async () => {

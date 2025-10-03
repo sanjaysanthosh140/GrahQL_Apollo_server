@@ -33,7 +33,7 @@ const ApolloServer_start = async () => {
                                 `${key}=${value}`
                             ).join(';');
                         // console.log(cookieHeader);
-                       const user_data = await fetch('https://myapp-server-side-rfxp.onrender.com/user_side/checkauth', {
+                        const user_data = await fetch('https://myapp-server-side-rfxp.onrender.com/user_side/checkauth', {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -43,20 +43,20 @@ const ApolloServer_start = async () => {
                             credentials: "include"
                         })
                         // .then((data) => data.json().then((data) => {
-                            // console.log(data);
-                            // }))
+                        // console.log(data);
+                        // }))
 
-                            if (user_data) {
-                                console.log("userIn");
-                                return {
-                                    user : await  user_data.json()
-                                }
-                            } else {
-                                console.log("no user");
-                                return {
-                                    user: false
-                                }
+                        if (user_data) {
+                            console.log("userIn");
+                            return {
+                                user: await user_data.json()
                             }
+                        } else {
+                            console.log("no user");
+                            return {
+                                user: false
+                            }
+                        }
 
                     } else {
                         console.log("no cookies / tokens");
@@ -75,12 +75,12 @@ const ApolloServer_start = async () => {
         server.applyMiddleware({
             app,
             cors: {
-                origin: 'https://client-side-24a22.web.app',
+                origin: ['https://client-side-24a22.web.app', 'http://localhost:5173'],
                 credentials: true,
                 allowedHeaders: ['Content-Type', 'Authorization']
             }
         });
-        app.listen(PORT,'0.0.0.0' ,() => {
+        app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server is running on port: http://localhost:8383${server.graphqlPath}`)
         })
     } catch (error) {

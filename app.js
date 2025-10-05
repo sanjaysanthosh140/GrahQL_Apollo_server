@@ -75,11 +75,7 @@ const ApolloServer_start = async () => {
         server.applyMiddleware({
             app,
             cors: {
-<<<<<<< HEAD
                 origin: ['https://saastoola-b3f60.web.app'],
-=======
-                origin: ['https://saastoola.web.app', 'http://localhost:5173'],
->>>>>>> bc22e4ddaf03025f65b11e20d9692b2c28762dd1
                 credentials: true,
                 allowedHeaders: ['Content-Type', 'Authorization']
             }

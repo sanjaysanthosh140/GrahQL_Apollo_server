@@ -21,6 +21,7 @@ const ApolloServer_start = async () => {
             resolvers,
             context: async ({ req }) => {
                 try {
+                    console.log("contex is working now")
                     let cookies = req.cookies;
                     console.log("gql cookies", cookies);
                     let token = req.headers.authorization || '';

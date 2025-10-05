@@ -25,7 +25,7 @@ const ApolloServer_start = async () => {
                     let cookies = req.cookies;
                     console.log("gql cookies", cookies);
                     let token = req.headers.authorization || '';
-                    console.log("token", token.length);
+                    //console.log("token", token.length);
 
                     if (token || cookies) {
                         console.log("working");

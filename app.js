@@ -48,9 +48,11 @@ const ApolloServer_start = async () => {
 
                         if (user_data) {
                             console.log("userIn");
-                            return {
-                                user: await user_data.json()
-                            }
+                            // return {
+                                // user: await user_data.json()
+                            // }
+                            let user = await user_data.json();
+                            console.log(user)
                         } else {
                             console.log("no user");
                             return {

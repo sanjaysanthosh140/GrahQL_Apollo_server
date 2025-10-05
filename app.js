@@ -1,22 +1,64 @@
-const Apollo_server = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 const express = require('express');
-const connection = require('./Ai_tool_outer/db/postgresQL.js')
+const connection = require('./Ai_tool_outer/db/postgresQL.js');
 const { typeDefs, resolvers } = require('./Ai_tool_outer/Query.js');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const morgan = require('morgan')
+const morgan = require('morgan');
 const PORT = 8383;
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-
 app.use(morgan('dev'));
+
+// ✅ FIXED CORS for Express app
+const allowedOrigins = [
+    'http://localhost:5173',
+    //'http://localhost:3000',
+    //'https://your-firebase-app.web.app',        // ADD YOUR FIREBASE DOMAIN
+    //'https://your-firebase-app.firebaseapp.com' // ADD YOUR FIREBASE DOMAIN
+];
+
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
+}));
+
+// ✅ OPTIMIZED Context - No HTTP calls for every request
+const context = async ({ req }) => {
+    try {
+        // Method 1: Check JWT Token
+        const token = req.headers.authorization?.replace('Bearer ', '');
+        if (token) {
+            try {
+                const decoded = jwt.verify(token, process.env.JWT_SECRET);
+                return { user: decoded };
+            } catch (jwtError) {
+                console.log('JWT invalid:', jwtError.message);
+            }
+        }
+
+        // Method 2: Check Session via Cookie
+        if (req.cookies && req.cookies['connect.sid']) {
+            // Session will be handled by your REST API when needed
+            return { user: null, hasSession: true };
+        }
+
+        return { user: null };
+
+    } catch (error) {
+        console.log('Context error:', error);
+        return { user: null };
+    }
+};
 
 const ApolloServer_start = async () => {
     try {
-        const server = new Apollo_server.ApolloServer({
+        const server = new ApolloServer({
             typeDefs,
             resolvers,
             context: async ({ req }) => {
@@ -70,27 +112,24 @@ const ApolloServer_start = async () => {
                     console.log(error)
                 }
 
-            }
+            },
 
-        })
+      cors: false // ✅ Disable Apollo CORS since we use Express CORS
+        });
 
         await server.start();
+
         server.applyMiddleware({
             app,
-            cors: {
-                origin: ['http://localhost:5173','https://myapp-server-side-rafv.onrender.com'],
-                credentials: true,
-                allowedHeaders: ['Content-Type', 'Authorization']
-            }
+            cors: false // ✅ Already handled by Express CORS
         });
+
         app.listen(PORT, '0.0.0.0', () => {
-            console.log(`Server is running on port: http://localhost:8383${server.graphqlPath}`)
-        })
+            console.log(`Server 2 running on: http://localhost:${PORT}${server.graphqlPath}`);
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-
-
-}
+};
 
 ApolloServer_start();

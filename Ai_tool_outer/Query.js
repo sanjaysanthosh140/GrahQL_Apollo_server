@@ -325,7 +325,7 @@ exports.resolvers = {
         ai_app_tool: (_, arg) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 const app_tool = yield pool.query("SELECT * FROM ai_app_tools WHERE id = $1", [arg.id]);
-                console.log(app_tool);
+                // console.log(app_tool);
                 return app_tool.rows[0];
             }
             catch (error) {
@@ -383,7 +383,7 @@ exports.resolvers = {
                 console.log(context.user.user_id);
                 let id = context.user.user_id;
                 //console.log(id._id)
-                const response = yield (0, node_fetch_1.default)(`https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`);
+                const response = yield (0, node_fetch_1.default)(`https://myapp-server-side-rafv.onrender.com/user_side/retrive_wish/${id}`);
                 const data = yield response.json();
                 const user_frv_tools = yield (0, pin_tools_merg_1.retrive_Pin_tools)(data);
                 console.log("##", user_frv_tools);

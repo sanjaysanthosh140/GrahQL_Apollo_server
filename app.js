@@ -34,7 +34,7 @@ const ApolloServer_start = async () => {
                                 `${key}=${value}`
                             ).join(';');
                         // console.log(cookieHeader);
-                        const user_data = await fetch('https://myapp-server-side-rfxp.onrender.com/user_side/checkauth', {
+                        const user_data = await fetch('https://myapp-server-side-rafv.onrender.com/user_side/checkauth', {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const ApolloServer_start = async () => {
         server.applyMiddleware({
             app,
             cors: {
-                origin: 'http://localhost:5173',
+                origin: ['http://localhost:5173','https://myapp-server-side-rafv.onrender.com'],
                 credentials: true,
                 allowedHeaders: ['Content-Type', 'Authorization']
             }

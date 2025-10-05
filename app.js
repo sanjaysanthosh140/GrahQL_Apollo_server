@@ -78,7 +78,7 @@ const ApolloServer_start = async () => {
         server.applyMiddleware({
             app,
             cors: {
-                origin: 'https://client-side-24a22.web.app',
+                origin: 'http://localhost:5173',
                 credentials: true,
                 allowedHeaders: ['Content-Type', 'Authorization']
             }

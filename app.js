@@ -72,10 +72,8 @@ const ApolloServer_start = async () => {
             app,
             cors: {
                 origin: [
-                    'http://localhost:5173',
+                    'https://saastoola-b3f60.web.app',
                     'https://myapp-server-side-rafv.onrender.com',
-                    'https://your-actual-firebase-app.web.app',
-                    'https://your-actual-firebase-app.firebaseapp.com'
                 ],
                 credentials: true,
                 allowedHeaders: ['Content-Type', 'Authorization']

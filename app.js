@@ -72,12 +72,13 @@ const ApolloServer_start = async () => {
             app,
             cors: {
 
-                origin: ['http://localhost:5173','https://myapp-server-side-rafv.onrender.com','https://my-app-clientisde-rf1p-lejlrl2w0-sanjaysanthosh140s-projects.vercel.app'],
+                //origin: ['http://localhost:5173','https://myapp-server-side-rafv.onrender.com','https://my-app-clientisde-rf1p-lejlrl2w0-sanjaysanthosh140s-projects.vercel.app'],
 
                 origin: [
                     'https://saastoola-b3f60.web.app',
                     'https://myapp-server-side-rfxp.onrender.com',
                     'https://myapp-server-side-rafv.onrender.com',
+                    'https://my-app-clientisde-rf1p-lejlrl2w0-sanjaysanthosh140s-projects.vercel.app'
                 ],
 
                 credentials: true,

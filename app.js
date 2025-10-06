@@ -73,6 +73,7 @@ const ApolloServer_start = async () => {
             cors: {
                 origin: [
                     'https://saastoola-b3f60.web.app',
+                    'https://myapp-server-side-rfxp.onrender.com',
                     'https://myapp-server-side-rafv.onrender.com',
                 ],
                 credentials: true,

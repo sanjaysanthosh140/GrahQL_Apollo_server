@@ -11,7 +11,6 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-
 app.use(morgan('dev'));
 
 const ApolloServer_start = async () => {
@@ -25,15 +24,13 @@ const ApolloServer_start = async () => {
                     let cookies = req.cookies;
                     console.log("gql cookies", cookies);
                     let token = req.headers.authorization || '';
-                    //console.log("token", token.length);
 
                     if (token || cookies) {
                         console.log("working");
                         const cookieHeader = Object.entries(cookies)
-                            .map(([key, value]) =>
-                                `${key}=${value}`
-                            ).join(';');
-                        // console.log(cookieHeader);
+                            .map(([key, value]) => `${key}=${value}`)
+                            .join(';');
+                        
                         const user_data = await fetch('https://myapp-server-side-rafv.onrender.com/user_side/checkauth', {
                             method: 'GET',
                             headers: {
@@ -43,17 +40,14 @@ const ApolloServer_start = async () => {
                             },
                             credentials: "include"
                         })
-                        // .then((data) => data.json().then((data) => {
-                        // console.log(data);
-                        // }))
 
                         if (user_data) {
                             console.log("userIn");
+                            const user = await user_data.json();
+                            console.log(user);
                             return {
-                                user: await user_data.json()
+                                user: user
                             }
-                            // let user = await user_data.json();
-                            // console.log(user)
                         } else {
                             console.log("no user");
                             return {
@@ -63,34 +57,41 @@ const ApolloServer_start = async () => {
 
                     } else {
                         console.log("no cookies / tokens");
+                        return { user: null };
                     }
 
-
                 } catch (error) {
-                    console.log(error)
+                    console.log(error);
+                    return { user: null };
                 }
-
             }
-
-        })
+        });
 
         await server.start();
         server.applyMiddleware({
             app,
             cors: {
+<<<<<<< HEAD
                 origin: ['http://localhost:5173','https://myapp-server-side-rafv.onrender.com','https://my-app-clientisde-rf1p-lejlrl2w0-sanjaysanthosh140s-projects.vercel.app'],
+=======
+                origin: [
+                    'https://saastoola-b3f60.web.app',
+                    'https://myapp-server-side-rfxp.onrender.com',
+                    'https://myapp-server-side-rafv.onrender.com',
+                ],
+>>>>>>> 52f4e73478ea22c6d74ba91ca1d4f69bf6df5539
                 credentials: true,
                 allowedHeaders: ['Content-Type', 'Authorization']
             }
         });
+        
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server is running on port: http://localhost:8383${server.graphqlPath}`)
-        })
+        });
+        
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-
-
 }
 
 ApolloServer_start();

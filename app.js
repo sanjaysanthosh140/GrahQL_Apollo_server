@@ -71,15 +71,15 @@ const ApolloServer_start = async () => {
         server.applyMiddleware({
             app,
             cors: {
-<<<<<<< HEAD
+
                 origin: ['http://localhost:5173','https://myapp-server-side-rafv.onrender.com','https://my-app-clientisde-rf1p-lejlrl2w0-sanjaysanthosh140s-projects.vercel.app'],
-=======
+
                 origin: [
                     'https://saastoola-b3f60.web.app',
                     'https://myapp-server-side-rfxp.onrender.com',
                     'https://myapp-server-side-rafv.onrender.com',
                 ],
->>>>>>> 52f4e73478ea22c6d74ba91ca1d4f69bf6df5539
+
                 credentials: true,
                 allowedHeaders: ['Content-Type', 'Authorization']
             }

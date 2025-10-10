@@ -9,28 +9,46 @@ const PORT = 8383;
 const cors = require('cors');
 const app = express();
 
-app.use(express.json());
-app.use(cookieParser());
-app.use(morgan('dev'));
-
 const ApolloServer_start = async () => {
+    // Middleware setup
+    // app.use(express.json());
+    // app.use(cookieParser());
+    // app.use(morgan('dev'));
+    // app.use(bodyParser.json());
+
+    // ✅ ADD Express CORS middleware
+    app.use(cors({
+        origin: [
+            'https://saastoola-b3f60.web.app',
+            'https://myapp-server-side-rfxp.onrender.com',
+            'https://myapp-server-side-rafv.onrender.com',
+        ],
+        credentials: true,
+        methods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
+    }));
+
     try {
         const server = new Apollo_server.ApolloServer({
+
             typeDefs,
             resolvers,
             context: async ({ req }) => {
                 try {
-                    console.log("contex is working now")
+                    console.log("=== GRAPHQL CONTEXT ===");
+                    console.log("Cookies received:", req.cookies);
+                    console.log("Authorization header:", req.headers.authorization);
+
                     let cookies = req.cookies;
-                    console.log("gql cookies", cookies);
                     let token = req.headers.authorization || '';
 
                     if (token || cookies) {
-                        console.log("working");
+                        console.log("Making auth check to Server 1...");
+
                         const cookieHeader = Object.entries(cookies)
                             .map(([key, value]) => `${key}=${value}`)
                             .join(';');
-                        
+
                         const user_data = await fetch('https://myapp-server-side-rafv.onrender.com/user_side/checkauth', {
                             method: 'GET',
                             headers: {
@@ -39,60 +57,46 @@ const ApolloServer_start = async () => {
                                 'Cookie': cookieHeader
                             },
                             credentials: "include"
-                        })
+                        });
 
-                        if (user_data) {
-                            console.log("userIn");
+                        if (user_data.ok) {
                             const user = await user_data.json();
-                            console.log(user);
-                            return {
-                                user: user
-                            }
+                            console.log("Auth result from Server 1:", user);
+                            return { user: user };
                         } else {
-                            console.log("no user");
-                            return {
-                                user: false
-                            }
+                            console.log("Auth check failed");
+                            return { user: null };
                         }
-
                     } else {
-                        console.log("no cookies / tokens");
+                        console.log("No auth credentials found");
                         return { user: null };
                     }
-
                 } catch (error) {
-                    console.log(error);
+                    console.log("Context error:", error);
                     return { user: null };
                 }
             }
         });
+        app.use(morgan("dev"));
+        app.use(express.json());
+        app.use(bodyParser.json());
+        app.use(cookieParser())
 
         await server.start();
+
         server.applyMiddleware({
             app,
-            cors: {
-
-                //origin: ['http://localhost:5173','https://myapp-server-side-rafv.onrender.com','https://my-app-clientisde-rf1p-lejlrl2w0-sanjaysanthosh140s-projects.vercel.app'],
-
-                origin: [
-                    'https://saastoola-b3f60.web.app',
-                    'https://myapp-server-side-rfxp.onrender.com',
-                    'https://myapp-server-side-rafv.onrender.com',
-                    'https://my-app-clientisde-rf1p-lejlrl2w0-sanjaysanthosh140s-projects.vercel.app'
-                ],
-
-                credentials: true,
-                allowedHeaders: ['Content-Type', 'Authorization']
-            }
+            cors: false // ✅ DISABLE Apollo CORS since we use Express CORS
         });
-        
+
         app.listen(PORT, '0.0.0.0', () => {
-            console.log(`Server is running on port: http://localhost:8383${server.graphqlPath}`)
+            console.log(`Server 2 running on: http://localhost:${PORT}${server.graphqlPath}`);
         });
-        
+
     } catch (error) {
         console.log(error);
     }
 }
 
 ApolloServer_start();
+

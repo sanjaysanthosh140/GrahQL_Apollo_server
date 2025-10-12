@@ -8,13 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = exports.typeDefs = void 0;
-const node_fetch_1 = __importDefault(require("node-fetch"));
-const pin_tools_merg_1 = require("./pin_tools_merg");
 const pool = require("./db/postgresQL");
 const errs = require("./custom_Error/err");
 // const pool = new Pool({
@@ -375,33 +370,39 @@ exports.resolvers = {
                 console.log(error);
             }
         }),
-        frv_toolslist: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {
-            /////// frv_tools
-            try {
-                //let pin_tool
-                console.log("function is called for frv_tools");
-                console.log(context.user.user_id);
-                let id = context.user.user_id;
-                //console.log(id._id)
-                const response = yield (0, node_fetch_1.default)(`https://myapp-server-side-rafv.onrender.com/user_side/retrive_wish/${id}`);
-                const data = yield response.json();
-                const user_frv_tools = yield (0, pin_tools_merg_1.retrive_Pin_tools)(data);
-                console.log("##", user_frv_tools);
-                // ADD THIS DEBUG CODE TO FIND THE NULL VALUE
-                user_frv_tools.forEach((tool, index) => {
-                    if (!tool || tool.name === null || tool.name === undefined) {
-                        console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
-                    }
-                });
-                // Filter out any null values before returning
-                const filteredTools = user_frv_tools.filter((tool) => tool && tool.name !== null && tool.name !== undefined);
-                console.log("Filtered tools count:", filteredTools.length);
-                return filteredTools;
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }),
+        // frv_toolslist: async (_: any, __: any, context: any) => {
+        //  
+        // try {
+        //let pin_tool
+        // console.log("function is called for frv_tools");
+        // console.log(context.user.user_id);
+        // let id = context.user.user_id;
+        // console.log(id._id)
+        // const response = await fetch(
+        // `https://myapp-server-side-rafv.onrender.com/user_side/retrive_wish/${id}`
+        // );
+        // const data = await response.json();
+        // const user_frv_tools: any = await retrive_Pin_tools(data);
+        // console.log("##", user_frv_tools);
+        // ADD THIS DEBUG CODE TO FIND THE NULL VALUE
+        // user_frv_tools.forEach(
+        // (tool: { name: null | undefined }, index: any) => {
+        // if (!tool || tool.name === null || tool.name === undefined) {
+        // console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
+        // }
+        // }
+        // );
+        // Filter out any null values before returning
+        // const filteredTools = user_frv_tools.filter(
+        // (tool: { name: null | undefined }) =>
+        // tool && tool.name !== null && tool.name !== undefined
+        // );
+        // console.log("Filtered tools count:", filteredTools.length);
+        // return filteredTools;
+        // } catch (error) {
+        // console.log(error);
+        // }
+        // },
         ////////////////////
         // Drop_ship
         ai_shopify_tools: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {

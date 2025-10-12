@@ -375,43 +375,43 @@ export const resolvers = {
       }
     },
 
-    frv_toolslist: async (_: any, __: any, context: any) => {
-      /////// frv_tools
-      try {
+    // frv_toolslist: async (_: any, __: any, context: any) => {
+    //  
+      // try {
         //let pin_tool
-        console.log("function is called for frv_tools");
-        console.log(context.user.user_id);
-        let id = context.user.user_id;
-        //console.log(id._id)
-        const response = await fetch(
-          `https://myapp-server-side-rafv.onrender.com/user_side/retrive_wish/${id}`
-        );
+        // console.log("function is called for frv_tools");
+        // console.log(context.user.user_id);
+        // let id = context.user.user_id;
+        // console.log(id._id)
+        // const response = await fetch(
+          // `https://myapp-server-side-rafv.onrender.com/user_side/retrive_wish/${id}`
+        // );
 
-        const data = await response.json();
+        // const data = await response.json();
 
-        const user_frv_tools: any = await retrive_Pin_tools(data);
-        console.log("##", user_frv_tools);
+        // const user_frv_tools: any = await retrive_Pin_tools(data);
+        // console.log("##", user_frv_tools);
         // ADD THIS DEBUG CODE TO FIND THE NULL VALUE
-        user_frv_tools.forEach(
-          (tool: { name: null | undefined }, index: any) => {
-            if (!tool || tool.name === null || tool.name === undefined) {
-              console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
-            }
-          }
-        );
+        // user_frv_tools.forEach(
+          // (tool: { name: null | undefined }, index: any) => {
+            // if (!tool || tool.name === null || tool.name === undefined) {
+              // console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
+            // }
+          // }
+        // );
 
         // Filter out any null values before returning
-        const filteredTools = user_frv_tools.filter(
-          (tool: { name: null | undefined }) =>
-            tool && tool.name !== null && tool.name !== undefined
-        );
+        // const filteredTools = user_frv_tools.filter(
+          // (tool: { name: null | undefined }) =>
+            // tool && tool.name !== null && tool.name !== undefined
+        // );
 
-        console.log("Filtered tools count:", filteredTools.length);
-        return filteredTools;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+        // console.log("Filtered tools count:", filteredTools.length);
+        // return filteredTools;
+      // } catch (error) {
+        // console.log(error);
+      // }
+    // },
     ////////////////////
     // Drop_ship
     ai_shopify_tools: async (_: any, __: any, context: any) => {

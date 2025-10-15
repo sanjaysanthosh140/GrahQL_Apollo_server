@@ -52,7 +52,7 @@ const ApolloServer_start = async () => {
                         });
 
                         if (user_data.ok) {
-                            console.log("this is a debugger authentication response ",user_data)
+                            //console.log("this is a debugger authentication response ",user_data)
                             const user = await user_data.json();
                             console.log("Auth result from Server 1:", user);
                             return { user: user };

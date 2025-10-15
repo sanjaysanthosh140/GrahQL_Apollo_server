@@ -406,7 +406,7 @@ export const resolvers = {
           );
 
           console.log("Filtered tools count:", filteredTools.length,filteredTools);
-          //return filteredTools;
+          return filteredTools;
         }
       } catch (error) {
         console.log(error);

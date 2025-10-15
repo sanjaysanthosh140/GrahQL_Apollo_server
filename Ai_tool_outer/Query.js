@@ -399,7 +399,7 @@ exports.resolvers = {
                     //   //Filter out any null values before returning
                     const filteredTools = user_frv_tools.filter((tool) => tool && tool.name !== null && tool.name !== undefined);
                     console.log("Filtered tools count:", filteredTools.length, filteredTools);
-                    //return filteredTools;
+                    return filteredTools;
                 }
             }
             catch (error) {

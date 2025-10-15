@@ -387,28 +387,27 @@ export const resolvers = {
             `https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`
           );
           const data = await response.json();
-          console.log("user_pinned_tools,",data);
+          console.log("user_pinned_tools,", data);
+          const user_frv_tools: any = await retrive_Pin_tools(data);
+          console.log("##", user_frv_tools);
+          //ADD THIS DEBUG CODE TO FIND THE NULL VALUE
+          // user_frv_tools.forEach(
+          // (tool: { name: null | undefined }, index: any) => {
+          // if (!tool || tool.name === null || tool.name === undefined) {
+          // console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
+          // }
+          // }
+          // );
+
+          //   //Filter out any null values before returning
+          const filteredTools = user_frv_tools.filter(
+            (tool: { name: null | undefined }) =>
+              tool && tool.name !== null && tool.name !== undefined
+          );
+
+          console.log("Filtered tools count:", filteredTools.length,filteredTools);
+          //return filteredTools;
         }
-        //   const user_frv_tools: any = await retrive_Pin_tools(data);
-        //   console.log("##", user_frv_tools);
-        //   //ADD THIS DEBUG CODE TO FIND THE NULL VALUE
-        //   user_frv_tools.forEach(
-        //     (tool: { name: null | undefined }, index: any) => {
-        //       if (!tool || tool.name === null || tool.name === undefined) {
-        //         console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
-        //       }
-        //     }
-        //   );
-
-        //   //Filter out any null values before returning
-        //   const filteredTools = user_frv_tools.filter(
-        //     (tool: { name: null | undefined }) =>
-        //       tool && tool.name !== null && tool.name !== undefined
-        //   );
-
-        //   console.log("Filtered tools count:", filteredTools.length);
-        //   return filteredTools;
-        // }
       } catch (error) {
         console.log(error);
       }

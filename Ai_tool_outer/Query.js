@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = exports.typeDefs = void 0;
 const node_fetch_1 = __importDefault(require("node-fetch"));
+const pin_tools_merg_1 = require("./pin_tools_merg");
 const pool = require("./db/postgresQL");
 const errs = require("./custom_Error/err");
 // const pool = new Pool({
@@ -385,25 +386,21 @@ exports.resolvers = {
                     const response = yield (0, node_fetch_1.default)(`https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`);
                     const data = yield response.json();
                     console.log("user_pinned_tools,", data);
+                    const user_frv_tools = yield (0, pin_tools_merg_1.retrive_Pin_tools)(data);
+                    console.log("##", user_frv_tools);
+                    //ADD THIS DEBUG CODE TO FIND THE NULL VALUE
+                    // user_frv_tools.forEach(
+                    // (tool: { name: null | undefined }, index: any) => {
+                    // if (!tool || tool.name === null || tool.name === undefined) {
+                    // console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
+                    // }
+                    // }
+                    // );
+                    //   //Filter out any null values before returning
+                    const filteredTools = user_frv_tools.filter((tool) => tool && tool.name !== null && tool.name !== undefined);
+                    console.log("Filtered tools count:", filteredTools.length, filteredTools);
+                    //return filteredTools;
                 }
-                //   const user_frv_tools: any = await retrive_Pin_tools(data);
-                //   console.log("##", user_frv_tools);
-                //   //ADD THIS DEBUG CODE TO FIND THE NULL VALUE
-                //   user_frv_tools.forEach(
-                //     (tool: { name: null | undefined }, index: any) => {
-                //       if (!tool || tool.name === null || tool.name === undefined) {
-                //         console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
-                //       }
-                //     }
-                //   );
-                //   //Filter out any null values before returning
-                //   const filteredTools = user_frv_tools.filter(
-                //     (tool: { name: null | undefined }) =>
-                //       tool && tool.name !== null && tool.name !== undefined
-                //   );
-                //   console.log("Filtered tools count:", filteredTools.length);
-                //   return filteredTools;
-                // }
             }
             catch (error) {
                 console.log(error);

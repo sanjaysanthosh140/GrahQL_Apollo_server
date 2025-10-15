@@ -319,7 +319,7 @@ export const resolvers = {
           "SELECT * FROM ai_app_tools WHERE id = $1",
           [arg.id]
         );
-       // console.log(app_tool);
+        // console.log(app_tool);
         return app_tool.rows[0];
       } catch (error) {
         console.log(error);
@@ -376,38 +376,38 @@ export const resolvers = {
     },
 
     frv_toolslist: async (_: any, __: any, context: any) => {
-     
       try {
-        let pin_tool
+        let pin_tool;
         console.log("function is called for frv_tools");
         console.log(context.user.user_id);
-        let id = context.user.user_id;
-        console.log(id._id)
-        const response = await fetch(
-          `https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`
-        );
+        let id = context.user.user_id; //isAuthenticate: true, user_id: '68ef286cb46e5477148d0fc9
+        if (id._id) {
+          console.log(id._id);
+          const response = await fetch(
+            `https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`
+          );
+          const data = await response.json();
 
-        const data = await response.json();
-
-        const user_frv_tools: any = await retrive_Pin_tools(data);
-        console.log("##", user_frv_tools);
-        //ADD THIS DEBUG CODE TO FIND THE NULL VALUE
-        user_frv_tools.forEach(
-          (tool: { name: null | undefined }, index: any) => {
-            if (!tool || tool.name === null || tool.name === undefined) {
-              console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
+          const user_frv_tools: any = await retrive_Pin_tools(data);
+          console.log("##", user_frv_tools);
+          //ADD THIS DEBUG CODE TO FIND THE NULL VALUE
+          user_frv_tools.forEach(
+            (tool: { name: null | undefined }, index: any) => {
+              if (!tool || tool.name === null || tool.name === undefined) {
+                console.error(`❌ NULL TOOL FOUND at index ${index}:`, tool);
+              }
             }
-          }
-        );
+          );
 
-        //Filter out any null values before returning
-        const filteredTools = user_frv_tools.filter(
-          (tool: { name: null | undefined }) =>
-            tool && tool.name !== null && tool.name !== undefined
-        );
+          //Filter out any null values before returning
+          const filteredTools = user_frv_tools.filter(
+            (tool: { name: null | undefined }) =>
+              tool && tool.name !== null && tool.name !== undefined
+          );
 
-        console.log("Filtered tools count:", filteredTools.length);
-        return filteredTools;
+          console.log("Filtered tools count:", filteredTools.length);
+          return filteredTools;
+        }
       } catch (error) {
         console.log(error);
       }
@@ -508,7 +508,7 @@ export const resolvers = {
         console.log(error);
       }
     },
-// education
+    // education
     ai_know_manage_tools: async (_: any, __: any, context: any) => {
       try {
         const know_mange = await pool.query(

@@ -378,16 +378,17 @@ export const resolvers = {
     frv_toolslist: async (_: any, __: any, context: any) => {
       try {
         console.log("function is called for frv_tools");
-        console.log(context.user.user_id);
-        let id = context.user.user_id; //isAuthenticate: true, user_id: '68ef286cb46e5477148d0fc9
-        console.log(id);
-        // if (id._id) {
-        //   console.log(id._id);
-        //   const response = await fetch(
-        //     `https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`
-        //   );
-        //   const data = await response.json();
-
+        if (context.user) {
+          console.log(context.user);
+          let id = context.user.user_id; //isAuthenticate: true, user_id: '68ef286cb46e5477148d0fc9
+          console.log(id);
+          //console.log(id._id);
+          const response = await fetch(
+            `https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`
+          );
+          const data = await response.json();
+          console.log("user_pinned_tools,",data);
+        }
         //   const user_frv_tools: any = await retrive_Pin_tools(data);
         //   console.log("##", user_frv_tools);
         //   //ADD THIS DEBUG CODE TO FIND THE NULL VALUE

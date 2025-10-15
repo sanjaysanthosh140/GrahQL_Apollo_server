@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = exports.typeDefs = void 0;
+const node_fetch_1 = __importDefault(require("node-fetch"));
 const pool = require("./db/postgresQL");
 const errs = require("./custom_Error/err");
 // const pool = new Pool({
@@ -373,15 +377,15 @@ exports.resolvers = {
         frv_toolslist: (_, __, context) => __awaiter(void 0, void 0, void 0, function* () {
             try {
                 console.log("function is called for frv_tools");
-                console.log(context.user.user_id);
-                let id = context.user.user_id; //isAuthenticate: true, user_id: '68ef286cb46e5477148d0fc9
-                console.log(id);
-                // if (id._id) {
-                //   console.log(id._id);
-                //   const response = await fetch(
-                //     `https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`
-                //   );
-                //   const data = await response.json();
+                if (context.user) {
+                    console.log(context.user);
+                    let id = context.user.user_id; //isAuthenticate: true, user_id: '68ef286cb46e5477148d0fc9
+                    console.log(id);
+                    //console.log(id._id);
+                    const response = yield (0, node_fetch_1.default)(`https://myapp-server-side-rfxp.onrender.com/user_side/retrive_wish/${id}`);
+                    const data = yield response.json();
+                    console.log("user_pinned_tools,", data);
+                }
                 //   const user_frv_tools: any = await retrive_Pin_tools(data);
                 //   console.log("##", user_frv_tools);
                 //   //ADD THIS DEBUG CODE TO FIND THE NULL VALUE

@@ -49,7 +49,7 @@ const ApolloServer_start = async () => {
                             .map(([key, value]) => `${key}=${value}`)
                             .join(';');
 
-                        const user_data = await fetch('https://myapp-server-side-rafv.onrender.com/user_side/checkauth', {
+                        const user_data = await fetch('https://myapp-server-side-rfxp.onrender.com/user_side/checkauth', {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',

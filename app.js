@@ -38,23 +38,15 @@ const ApolloServer_start = async () => {
                     console.log("=== GRAPHQL CONTEXT ===");
                     console.log("Cookies received:", req.cookies);
                     console.log("Authorization header:", req.headers.authorization);
-
-                    let cookies = req.cookies;
                     let token = req.headers.authorization || '';
 
-                    if (token || cookies) {
+                    if (token) {
                         console.log("Making auth check to Server 1...");
-
-                        const cookieHeader = Object.entries(cookies)
-                            .map(([key, value]) => `${key}=${value}`)
-                            .join(';');
-
                         const user_data = await fetch('https://myapp-server-side-rfxp.onrender.com/user_side/checkauth', {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Authorization': `${token}`,
-                                'Cookie': cookieHeader
                             },
                             credentials: "include"
                         });
